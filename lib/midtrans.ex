@@ -1,26 +1,10 @@
 defmodule Midtrans do
   @moduledoc """
-  Documentation for Midtrans.
+  This is Module to generate the SNAP token and its respective redirect_url.
   """
 
   @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Midtrans.hello()
-      :world
-
-       Midtrans.get_token(:sandbox, %{"transaction_details" => %{"order_id" => "Order-1012", "gross_amount" => 100000}}, "SB-Mid-server-YY_hqXAGhzyD3iFNf42npUEe")
-
-      "SB-Mid-server-YY_hqXAGhzyD3iFNf42npUEe"
-
-          payload = %{
-      "transaction_details" => %{
-        "order_id" => "ORDER-101",
-        "gross_amount" => 10000
-      }
-    }
+  The only function to get the token.
 
   """
 
@@ -33,6 +17,8 @@ defmodule Midtrans do
     url = "https://app.sandbox.midtrans.com/snap/v1/transactions"
     call_token(url, payload, server_key)
   end
+
+  # Midtrans.get_token(:sandbox, %{"transaction_details" => %{"order_id" => "Order-1012", "gross_amount" => 100000}}, "SB-Mid-server-YY_hqXAGhzyD3iFNf42npUEe")
 
   defp call_token(url, payload, server_key) do
     header = header_builder(server_key)
