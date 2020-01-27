@@ -61,3 +61,7 @@ def deps do
   ]
 end
 ```
+
+Then run
+
+`mix deps.get`
