@@ -8,28 +8,30 @@ defmodule Midtrans do
 
   """
 
-  def get_token(:prod, payload, server_key) do
-    url = "https://app.midtrans.com/snap/v1/transactions"
-    call_token(url, payload, server_key)
-  end
 
-  def get_token(:sandbox, payload, server_key) do
-    url = "https://app.sandbox.midtrans.com/snap/v1/transactions"
-    call_token(url, payload, server_key)
-  end
+  # Midtrans.get_payment_url(%{"transaction_details" => %{"order_id" => "Order-1012", "gross_amount" => 100000}})
 
-  # Midtrans.get_token(:sandbox, %{"transaction_details" => %{"order_id" => "Order-1012", "gross_amount" => 100000}}, "SB-Mid-server-YY_hqXAGhzyD3iFNf42npUEe")
+  def get_payment_url(payload) do
 
-  defp call_token(url, payload, server_key) do
-    header = header_builder(server_key)
+    server_key = Application.get_env(:midtrans, :server_key)
+    url = Application.get_env(:midtrans, :url)
 
-    post_body = Jason.encode!(payload)
+    cond do
+      is_nil(server_key) -> {:error, "Can't find :server_key in your config file under :midtrans"}
+      is_nil(url) -> {:error, "Can't find :url in your config file under :midtrans"}
+      true ->
 
-    case HTTPoison.post(url, post_body, header) do
-      {:ok, %HTTPoison.Response{body: body, status_code: 201}} -> Jason.decode(body)
-      {:ok, %HTTPoison.Response{body: body}} -> decode_error(body)
-      {:ok, _} -> {:error, "Unknown error from Midtrans return"}
-      _ -> {:error, "Cannot connect to the server, the issue is from our side."}
+        header = header_builder(server_key)
+
+        post_body = Jason.encode!(payload)
+
+        case HTTPoison.post(url, post_body, header) do
+          {:ok, %HTTPoison.Response{body: body, status_code: 201}} -> Jason.decode(body)
+          {:ok, %HTTPoison.Response{body: body}} -> decode_error(body)
+          {:ok, _} -> {:error, "Unknown error from Midtrans return"}
+          _ -> {:error, "Cannot connect to the server, the issue is from our side."}
+        end
+
     end
   end
 

@@ -4,6 +4,18 @@ If you building application with Elixir Phoenix and want to use midtrans as your
 
 ## How to use
 
+0. Create config inside your dev.exs (and prod.secret.exs accordingly when goes into production)
+
+```elixir
+  config :midtrans, 
+          is_active: true,
+          url: "https://app.sandbox.midtrans.com/snap/v1/transactions",
+          client_key: "SB-Mid-client-JHnLjiXe9eb47eFX",
+          server_key: "SB-Mid-server-YY_hqXAGhzyD3iFNf42npUEX",
+          merchant_id: "M10442X"
+```
+
+
 1. Get your `SERVER_KEY` from [midtrans configuration page](https://dashboard.sandbox.midtrans.com/integrations/configurations).
 
 2. Create a Map containing your transaction detail. You can follow [this documentation for refference](https://snap-docs.midtrans.com/#request-body-json-parameter). But the minimum can be made as follow:
